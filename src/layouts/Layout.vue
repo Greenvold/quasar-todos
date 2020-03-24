@@ -48,7 +48,13 @@ export default {
           title: "Todo",
           caption: "quasar.dev",
           icon: "list",
-          link: "https://quasar.dev/settings"
+          link: "/"
+        },
+        {
+          title: "Settings",
+          caption: "",
+          icon: "settings",
+          link: "/settings"
         }
       ]
     };

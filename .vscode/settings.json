@@ -3,6 +3,10 @@
         {
             "name": "feature/navbar",
             "base": "develop"
+        },
+        {
+            "name": "feature/working_on_navbar",
+            "base": "develop"
         }
     ]
 }
