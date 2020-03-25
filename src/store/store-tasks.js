@@ -24,9 +24,19 @@ const state = {
   }
 };
 
-const mutations = {};
+const mutations = {
+  updateTask(state, payload) {
+    console.log(payload);
 
-const actions = {};
+    Object.assign(state.tasks[payload.id], payload.updates);
+  }
+};
+
+const actions = {
+  updateTask({ commit }, payload) {
+    commit("updateTask", payload);
+  }
+};
 
 const getters = {
   tasks: state => {

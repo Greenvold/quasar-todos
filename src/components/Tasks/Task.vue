@@ -2,11 +2,11 @@
   <q-item
     v-ripple
     clickable
-    @click="task.completed =!task.completed"
+    @click="updateTask({id:id,updates:{completed:!task.completed}})"
     :class="task.completed ? 'bg-orange-1' : ''"
   >
     <q-item-section side top>
-      <q-checkbox v-model="task.completed" />
+      <q-checkbox :value="task.completed" no-pointer-events />
     </q-item-section>
     <q-item-section>
       <q-item-label :class="{'text-strikethrough' : task.completed}">{{task.name}}</q-item-label>
@@ -28,8 +28,12 @@
   </q-item>
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
-  props: ["task", "id"]
+  props: ["task", "id"],
+  methods: {
+    ...mapActions("tasks", ["updateTask"])
+  }
 };
 </script>
 <style lang="scss">
