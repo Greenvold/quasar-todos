@@ -6,6 +6,11 @@
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App"
+};
 </script>
+<style>
+.text-strikethrough {
+  text-decoration: line-through;
+}
+</style>
