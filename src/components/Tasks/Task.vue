@@ -3,10 +3,14 @@
     v-ripple
     clickable
     @click="updateTask({id:id,updates:{completed:!task.completed}})"
-    :class="task.completed ? 'bg-orange-1' : ''"
+    :class="!task.completed ? 'bg-orange-1' : 'bg-green-2 '"
   >
     <q-item-section side top>
-      <q-checkbox :value="task.completed" class="no-pointer-events" />
+      <q-checkbox
+        :value="task.completed"
+        class="no-pointer-events"
+        :color="!task.completed ? 'orange-1' : 'green-4 '"
+      />
     </q-item-section>
     <q-item-section>
       <q-item-label :class="{'text-strikethrough' : task.completed}">{{task.name}}</q-item-label>

@@ -1,10 +1,12 @@
 <template>
   <q-page class="q-pa-md">
-    <q-list separator bordered v-if="Object.keys(tasks).length">
-      <q-item-label header>General</q-item-label>
-      <task v-for="(task, key) in tasks" :key="key" :task="task" :id="key" />
-      <q-item v-ripple></q-item>
-    </q-list>
+    <div class="row q-mb-lg">
+      <search-bar />
+    </div>
+    <no-tasks v-if="!Object.keys(tasksTodo).length" />
+    <tasks-todo :tasksTodo="tasksTodo" />
+    <hr />
+    <tasks-completed :tasksCompleted="completedTasks" class="q-mt-lg" />
     <div class="absolute-bottom text-center q-mb-lg" @click="showAddTask = !showAddTask">
       <q-btn round color="primary" size="24px" icon="add" />
     </div>
@@ -25,11 +27,20 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("tasks", ["tasks"])
+    ...mapGetters("tasks", ["tasksTodo", "completedTasks"])
   },
   components: {
     task: require("components/Tasks/Task.vue").default,
-    addTask: require("components/Tasks/Modals/AddTask.vue").default
+    addTask: require("components/Tasks/Modals/AddTask.vue").default,
+    tasksTodo: require("components/Tasks/TasksTodo.vue").default,
+    tasksCompleted: require("components/Tasks/TasksCompleted.vue").default,
+    noTasks: require("components/Tasks/NoTasksTodo").default,
+    searchBar: require("components/Tasks/Tools/Search").default
+  },
+  mounted() {
+    this.$root.$on("showAddTask", () => {
+      this.showAddTask = true;
+    });
   }
 };
 </script>
