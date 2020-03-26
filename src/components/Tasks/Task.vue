@@ -6,13 +6,13 @@
     :class="task.completed ? 'bg-orange-1' : ''"
   >
     <q-item-section side top>
-      <q-checkbox :value="task.completed" no-pointer-events />
+      <q-checkbox :value="task.completed" class="no-pointer-events" />
     </q-item-section>
     <q-item-section>
       <q-item-label :class="{'text-strikethrough' : task.completed}">{{task.name}}</q-item-label>
       <q-item-label caption>{{task.desc}}</q-item-label>
     </q-item-section>
-    <q-item-section side>
+    <q-item-section side v-if="task.dueDate">
       <div class="row">
         <div class="column justify-center">
           <q-icon name="event" size="18px" class="q-mr-sm" />
