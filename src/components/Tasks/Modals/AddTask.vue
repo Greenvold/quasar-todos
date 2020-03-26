@@ -1,61 +1,14 @@
 <template>
   <q-card>
-    <q-card-section class="row">
-      <div class="text-h6">Adding new Todo</div>
-      <q-space />
-      <q-btn flat round dense icon="close" v-close-popup />
-    </q-card-section>
+    <modal-header>Add task</modal-header>
     <q-form @submit.prevent="submitForm">
       <q-card-section class="q-pt-none">
-        <div class="row q-mb-sm">
-          <q-input
-            clearable
-            outlined
-            v-model="taskToSubmit.name"
-            label="Task name"
-            class="col"
-            :rules="[val => !!val || 'Field is required']"
-            ref="name"
-            autofocus
-          />
-        </div>
-        <div class="row q-mb-sm">
-          <q-input
-            clearable
-            outlined
-            v-model="taskToSubmit.desc"
-            label="Task description"
-            class="col"
-            type="textarea"
-            :rules="[val => !!val || 'Field is required']"
-          />
-        </div>
-        <div class="row q-mb-sm">
-          <q-input outlined v-model="taskToSubmit.dueDate" label="Due date">
-            <template v-slot:append>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                  <q-date v-model="taskToSubmit.dueDate" @input="() => $refs.qDateProxy.hide()" />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-        </div>
-        <div class="row q-mb-sm" v-if="taskToSubmit.dueDate">
-          <q-input filled v-model="taskToSubmit.dueTime" label="Due time">
-            <template v-slot:append>
-              <q-icon name="access_time" class="cursor-pointer">
-                <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-time v-model="taskToSubmit.dueTime" />
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-        </div>
+        <modal-task-name :name.sync="taskToSubmit.name" ref="modalTaskName" />
+        <modal-task-description :description.sync="taskToSubmit.desc" />
+        <modal-task-due-date :dueDate.sync="taskToSubmit.dueDate" />
+        <modal-task-due-time :dueTime.sync="taskToSubmit.dueTime" v-if="taskToSubmit.dueDate" />
       </q-card-section>
-      <q-card-actions align="right">
-        <q-btn label="Save" color="primary" type="submit" />
-      </q-card-actions>
+      <modal-task-buttons />
     </q-form>
   </q-card>
 </template>
@@ -76,8 +29,8 @@ export default {
   methods: {
     ...mapActions("tasks", ["addTask"]),
     submitForm() {
-      // this.$refs.name.validate();
-      if (!this.$refs.name.hasError) {
+      this.$refs.modalTaskName.$refs.name.validate();
+      if (!this.$refs.modalTaskName.$refs.name.hasError) {
         this.submitTask();
       }
     },
@@ -85,6 +38,20 @@ export default {
       this.addTask(this.taskToSubmit);
       this.$emit("close");
     }
+  },
+  components: {
+    modalHeader: require("components/Tasks/Modals/Shared/ModalHeader.vue")
+      .default,
+    modalTaskName: require("components/Tasks/Modals/Shared/ModalTaskName.vue")
+      .default,
+    modalTaskDueDate: require("components/Tasks/Modals/Shared/ModalTaskDueDate.vue")
+      .default,
+    modalTaskDueTime: require("components/Tasks/Modals/Shared/ModalTaskDueTime.vue")
+      .default,
+    modalTaskDescription: require("components/Tasks/Modals/Shared/ModalTaskDescription.vue")
+      .default,
+    modalTaskButtons: require("components/Tasks/Modals/Shared/ModalTaskButtons.vue")
+      .default
   }
 };
 </script>
