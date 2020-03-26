@@ -3,9 +3,11 @@
     <div class="row q-mb-lg">
       <search-bar />
     </div>
-    <no-tasks v-if="!Object.keys(tasksTodo).length" />
+    <no-tasks v-if="!Object.keys(tasksTodo).length && !search" />
+    <p
+      v-if="!Object.keys(tasksTodo).length && !Object.keys(completedTasks).length"
+    >No search results.</p>
     <tasks-todo :tasksTodo="tasksTodo" />
-    <hr />
     <tasks-completed :tasksCompleted="completedTasks" class="q-mt-lg" />
     <div class="absolute-bottom text-center q-mb-lg" @click="showAddTask = !showAddTask">
       <q-btn round color="primary" size="24px" icon="add" />
@@ -17,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "PageIndex",
@@ -27,7 +29,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("tasks", ["tasksTodo", "completedTasks"])
+    ...mapGetters("tasks", ["tasksTodo", "completedTasks"]),
+    ...mapState("tasks", ["search"])
   },
   components: {
     task: require("components/Tasks/Task.vue").default,
