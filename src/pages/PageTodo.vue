@@ -1,19 +1,33 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="row q-mb-lg">
-      <search-bar />
-      <sort />
-    </div>
-    <div class="relative-position">
-      <no-tasks v-if="!Object.keys(tasksTodo).length && !search" />
-      <p
-        v-if="!Object.keys(tasksTodo).length && !Object.keys(completedTasks).length"
-      >No search results.</p>
-      <tasks-todo :tasksTodo="tasksTodo" />
-      <tasks-completed :tasksCompleted="completedTasks" class="q-mt-lg" />
-    </div>
-    <div class="absolute-bottom text-center q-mb-lg" @click="showAddTask = !showAddTask">
-      <q-btn round color="primary" size="24px" icon="add" />
+  <q-page>
+    <div class="q-pa-md absolute full-width full-height column">
+      <div class="row q-mb-lg">
+        <search-bar />
+        <sort />
+      </div>
+      <q-scroll-area class="relative-positio q-scroll-area-tasks">
+        <no-tasks v-if="!settings.showTasksInOneList" />
+        <p
+          v-if="!Object.keys(tasksTodo).length && !Object.keys(completedTasks).length"
+        >No search results.</p>
+        <tasks-todo :tasksTodo="tasksTodo" />
+        <tasks-completed
+          :tasksCompleted="completedTasks"
+          class="q-mb-xl"
+          :class="{'q-mt-lg' :!settings.showTasksInOneList}"
+        />
+      </q-scroll-area>
+      <!-- nopointer events will disable mouse actions on that element -->
+      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+        <q-btn
+          round
+          color="primary"
+          size="24px"
+          icon="add"
+          class="all-pointer-events"
+          @click="showAddTask = !showAddTask"
+        />
+      </div>
     </div>
     <q-dialog v-model="showAddTask">
       <add-task @close="showAddTask = false" />
@@ -33,7 +47,8 @@ export default {
   },
   computed: {
     ...mapGetters("tasks", ["tasksTodo", "completedTasks"]),
-    ...mapState("tasks", ["search"])
+    ...mapState("tasks", ["search"]),
+    ...mapGetters("settings", ["settings"])
   },
   components: {
     task: require("components/Tasks/Task").default,
@@ -51,3 +66,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.q-scroll-area-tasks {
+  display: flex;
+  flex-grow: 1;
+}
+</style>
