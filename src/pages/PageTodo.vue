@@ -4,12 +4,14 @@
       <search-bar />
       <sort />
     </div>
-    <no-tasks v-if="!Object.keys(tasksTodo).length && !search" />
-    <p
-      v-if="!Object.keys(tasksTodo).length && !Object.keys(completedTasks).length"
-    >No search results.</p>
-    <tasks-todo :tasksTodo="tasksTodo" />
-    <tasks-completed :tasksCompleted="completedTasks" class="q-mt-lg" />
+    <div class="relative-position">
+      <no-tasks v-if="!Object.keys(tasksTodo).length && !search" />
+      <p
+        v-if="!Object.keys(tasksTodo).length && !Object.keys(completedTasks).length"
+      >No search results.</p>
+      <tasks-todo :tasksTodo="tasksTodo" />
+      <tasks-completed :tasksCompleted="completedTasks" class="q-mt-lg" />
+    </div>
     <div class="absolute-bottom text-center q-mb-lg" @click="showAddTask = !showAddTask">
       <q-btn round color="primary" size="24px" icon="add" />
     </div>
