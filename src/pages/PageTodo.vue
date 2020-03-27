@@ -2,6 +2,7 @@
   <q-page class="q-pa-md">
     <div class="row q-mb-lg">
       <search-bar />
+      <sort />
     </div>
     <no-tasks v-if="!Object.keys(tasksTodo).length && !search" />
     <p
@@ -33,12 +34,13 @@ export default {
     ...mapState("tasks", ["search"])
   },
   components: {
-    task: require("components/Tasks/Task.vue").default,
-    addTask: require("components/Tasks/Modals/AddTask.vue").default,
-    tasksTodo: require("components/Tasks/TasksTodo.vue").default,
-    tasksCompleted: require("components/Tasks/TasksCompleted.vue").default,
+    task: require("components/Tasks/Task").default,
+    addTask: require("components/Tasks/Modals/AddTask").default,
+    tasksTodo: require("components/Tasks/TasksTodo").default,
+    tasksCompleted: require("components/Tasks/TasksCompleted").default,
     noTasks: require("components/Tasks/NoTasksTodo").default,
-    searchBar: require("components/Tasks/Tools/Search").default
+    searchBar: require("components/Tasks/Tools/Search").default,
+    sort: require("components/Tasks/Tools/Sort").default
   },
   mounted() {
     this.$root.$on("showAddTask", () => {

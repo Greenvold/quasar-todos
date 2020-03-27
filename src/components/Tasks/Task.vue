@@ -4,6 +4,7 @@
     clickable
     @click="updateTask({id:id,updates:{completed:!task.completed}})"
     :class="!task.completed ? 'bg-orange-1' : 'bg-green-2 '"
+    v-touch-hold:1000.mouse="showEditTaskModal"
   >
     <q-item-section side top>
       <q-checkbox
@@ -13,7 +14,7 @@
       />
     </q-item-section>
     <q-item-section>
-      <q-item-label :class="{'text-strikethrough' : task.completed}">{{task.name}}</q-item-label>
+      <q-item-label :class="{'text-strikethrough' : task.completed}">{{task.name | searchHighlight}}</q-item-label>
       <q-item-label caption>{{task.desc}}</q-item-label>
     </q-item-section>
     <q-item-section side v-if="task.dueDate">
@@ -22,7 +23,7 @@
           <q-icon name="event" size="18px" class="q-mr-sm" />
         </div>
         <div class="column">
-          <q-item-label class="row justify-end" caption>{{task.dueDate}}</q-item-label>
+          <q-item-label class="row justify-end" caption>{{task.dueDate | niceDate}}</q-item-label>
           <q-item-label class="row justify-end" caption>
             <small>{{task.dueTime}}</small>
           </q-item-label>
@@ -42,6 +43,8 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import { date } from "quasar";
+
 export default {
   props: ["task", "id"],
   data() {
@@ -68,10 +71,18 @@ export default {
         .onDismiss(() => {
           // console.log('I am triggered on both OK and Cancel')
         });
+    },
+    showEditTaskModal() {
+      this.showEditTask = true;
     }
   },
   components: {
-    editTask: require("components/Tasks/EditTask").default
+    editTask: require("components/Tasks/Modals/EditTask").default
+  },
+  filters: {
+    niceDate(value) {
+      return date.formatDate(value, "MMMM D");
+    }
   }
 };
 </script>
