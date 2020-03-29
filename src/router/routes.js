@@ -8,6 +8,17 @@ const routes = [
         path: "/settings",
         name: "settings",
         component: () => import("pages/PageSettings.vue")
+      },
+      {
+        path: "/settings/help",
+        name: "help",
+        component: () => import("pages/PageHelp.vue")
+      },
+      ,
+      {
+        path: "/auth",
+        name: "auth",
+        component: () => import("pages/PageAuth.vue")
       }
     ]
   }

@@ -1,3 +1,5 @@
+import { LocalStorage } from "quasar";
+
 const state = {
   settings: {
     show12HourTimeFormat: true,
@@ -11,15 +13,31 @@ const mutations = {
   },
   setShowTasksInOneList(state, value) {
     state.settings.showTasksInOneList = value;
+  },
+  setSettings(state, settings) {
+    Object.assign(state.settings, settings);
   }
 };
 
 const actions = {
-  setShow12HourFormat({ commit }, value) {
+  setShow12HourFormat({ commit, dispatch }, value) {
     commit("setShow12HourFormat", value);
+    dispatch("saveSettings");
   },
-  setShowTasksInOneList({ commit }, value) {
+  setShowTasksInOneList({ commit, dispatch }, value) {
     commit("setShowTasksInOneList", value);
+    dispatch("saveSettings");
+  },
+  saveSettings({ state }) {
+    //quasar local storage plugin
+    LocalStorage.set("settings", state.settings);
+  },
+  getSettings({ commit }) {
+    let settings = LocalStorage.getItem("settings");
+    if (settings) {
+      LocalStorage.getItem("settings");
+      commit("setSettings", settings);
+    }
   }
 };
 

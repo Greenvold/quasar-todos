@@ -3,7 +3,6 @@
     <div v-if="Object.keys(tasksCompleted).length">
       <list-header bgcolor="bg-green-4" v-if="!settings.showTasksInOneList">Completed</list-header>
       <q-list separator bordered>
-        <q-item-label header>General</q-item-label>
         <task v-for="(task, key) in tasksCompleted" :key="key" :task="task" :id="key" />
       </q-list>
     </div>

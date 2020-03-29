@@ -7,7 +7,6 @@
     <div v-if="Object.keys(tasksTodo).length">
       <list-header bgcolor="bg-orange-4" v-if="!settings.showTasksInOneList">Todo</list-header>
       <q-list separator bordered>
-        <q-item-label header>General</q-item-label>
         <task v-for="(task, key) in tasksTodo" :key="key" :task="task" :id="key" />
       </q-list>
     </div>

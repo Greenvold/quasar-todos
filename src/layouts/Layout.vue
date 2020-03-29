@@ -12,6 +12,13 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />-->
         <q-toolbar-title class="absolute-center">Awsome Todo</q-toolbar-title>
+        <q-btn
+          icon-right="account_circle"
+          label="Login"
+          class="absolute-right"
+          flat
+          :to="{name:'auth'}"
+        />
       </q-toolbar>
     </q-header>
 

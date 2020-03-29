@@ -6,7 +6,7 @@
         <sort />
       </div>
       <q-scroll-area class="relative-positio q-scroll-area-tasks">
-        <no-tasks v-if="!settings.showTasksInOneList" />
+        <no-tasks v-if="!settings.showTasksInOneList && !Object.keys(tasksTodo).length" />
         <p
           v-if="!Object.keys(tasksTodo).length && !Object.keys(completedTasks).length"
         >No search results.</p>
