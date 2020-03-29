@@ -17,7 +17,16 @@
           label="Login"
           class="absolute-right"
           flat
-          :to="{name:'auth'}"
+          :to="{ name: 'auth' }"
+          v-if="!loggedIn"
+        />
+        <q-btn
+          icon-right="exit_to_app"
+          label="Logout"
+          class="absolute-right"
+          flat
+          v-else
+          @click="logout"
         />
       </q-toolbar>
     </q-header>
@@ -60,6 +69,8 @@
 
 <script>
 import EssentialLink from "components/EssentialLink";
+import { mapState } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "MainLayout",
@@ -85,6 +96,15 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    ...mapState("auth", ["loggedIn"])
+  },
+  methods: {
+    ...mapActions("auth", ["logoutUser"]),
+    logout() {
+      this.logoutUser();
+    }
   }
 };
 </script>

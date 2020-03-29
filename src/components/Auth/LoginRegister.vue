@@ -5,7 +5,7 @@
         <template v-slot:avatar>
           <q-icon name="account_circle" color="primary" />
         </template>
-        {{ tab | titleCase}} to access your Todos anywhere!
+        {{ tab | titleCase }} to access your Todos anywhere!
       </q-banner>
     </div>
     <div class="row q-mb-md">
@@ -14,7 +14,10 @@
         v-model="formData.email"
         label="Email address"
         class="col"
-        :rules="[ val => isValidEmaillAddress(val)|| 'Please enter a valid emaill address']"
+        :rules="[
+          val =>
+            isValidEmaillAddress(val) || 'Please enter a valid emaill address'
+        ]"
         lazy-rules
         ref="email"
       />
@@ -26,7 +29,9 @@
         label="Password"
         class="col"
         type="password"
-        :rules="[ val => val.length >= 6 || 'Please enter at least 6 characters']"
+        :rules="[
+          val => val.length >= 6 || 'Please enter at least 6 characters'
+        ]"
         lazy-rules
         ref="password"
       />
@@ -38,6 +43,7 @@
   </form>
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
   props: ["tab"],
   data() {
@@ -49,14 +55,16 @@ export default {
     };
   },
   methods: {
+    ...mapActions("auth", ["registerUser", "loginUser"]),
     submitForm() {
       this.$refs.email.validate();
       this.$refs.password.validate();
       if (!this.$refs.email.hasError || !this.$refs.password.hasError) {
         if (this.tab == "login") {
           //login user
+          this.loginUser(this.formData);
         } else {
-          //register user
+          this.registerUser(this.formData);
         }
       }
     },

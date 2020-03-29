@@ -1,29 +1,30 @@
 import Vue from "vue";
 import { uid } from "quasar";
+import { firebaseDb, firebaseAuth } from "boot/firebase";
 
 const state = {
   tasks: {
-    ID1: {
-      name: "Go to Shop",
-      desc: "Buy all the stuff you can find",
-      dueDate: "2019/05/12",
-      dueTime: "18:30",
-      completed: false
-    },
-    ID2: {
-      name: "Get the XRP",
-      desc: "Check the crypto market daily for prices changes.",
-      dueDate: "2019/05/13",
-      dueTime: "14:30",
-      completed: false
-    },
-    ID3: {
-      name: "Watch the stocks",
-      desc: "What happens on the stock. Check it on daily routine.",
-      dueDate: "2019/05/11",
-      dueTime: "15:30",
-      completed: true
-    }
+    // ID1: {
+    //   name: "Go to Shop",
+    //   desc: "Buy all the stuff you can find",
+    //   dueDate: "2019/05/12",
+    //   dueTime: "18:30",
+    //   completed: false
+    // },
+    // ID2: {
+    //   name: "Get the XRP",
+    //   desc: "Check the crypto market daily for prices changes.",
+    //   dueDate: "2019/05/13",
+    //   dueTime: "14:30",
+    //   completed: false
+    // },
+    // ID3: {
+    //   name: "Watch the stocks",
+    //   desc: "What happens on the stock. Check it on daily routine.",
+    //   dueDate: "2019/05/11",
+    //   dueTime: "15:30",
+    //   completed: true
+    // }
   },
   search: "",
   sort: "dueDate"
@@ -67,6 +68,33 @@ const actions = {
   },
   setSort({ commit }, value) {
     commit("setSort", value);
+  },
+  fbReadData({ commit }) {
+    let userTasks = firebaseDb.ref("tasks/" + firebaseAuth.currentUser.uid);
+    //child added
+    userTasks.on("child_added", snapshot => {
+      let task = snapshot.val();
+      let payload = {
+        id: snapshot.key,
+        task: task
+      };
+      commit("addTask", payload);
+    });
+    //child changed
+    userTasks.on("child_changed", snapshot => {
+      let task = snapshot.val();
+      let payload = {
+        id: snapshot.key,
+        updates: task
+      };
+      commit("updateTask", payload);
+    });
+    //child deleted
+    userTasks.on("child_removed", snapshot => {
+      let task = snapshot.val();
+      let payload = snapshot.key;
+      commit("deleteTask", payload);
+    });
   }
 };
 
