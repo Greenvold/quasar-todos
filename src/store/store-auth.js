@@ -54,6 +54,8 @@ const actions = {
         //root true allows us to dispatch actions from different module
         dispatch("tasks/fbReadData", null, { root: true });
       } else {
+        commit("tasks/setTaskDownloaded", false, { root: true });
+        commit("tasks/clearTasks", null, { root: true });
         commit("setLoggedIn", false);
         LocalStorage.set("loggedIn", false);
         this.$router.replace("/auth");
