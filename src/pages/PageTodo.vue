@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     ...mapGetters("tasks", ["tasksTodo", "completedTasks"]),
-    ...mapState("tasks", ["search", "setTasksDownloaded"]),
+    ...mapState("tasks", ["search", "tasksDownloaded"]),
     ...mapGetters("settings", ["settings"])
   },
   components: {
