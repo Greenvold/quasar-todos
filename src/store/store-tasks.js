@@ -1,6 +1,7 @@
 import Vue from "vue";
-import { uid } from "quasar";
+import { uid, Notify } from "quasar";
 import { firebaseDb, firebaseAuth } from "boot/firebase";
+import { showErrorMessage } from "src/functions/function-show-error-message";
 
 const state = {
   tasks: {},
@@ -89,19 +90,40 @@ const actions = {
     let taskRef = firebaseDb.ref(
       "tasks/" + firebaseAuth.currentUser.uid + "/" + payload.id
     );
-    taskRef.set(payload.task);
+    taskRef.set(payload.task, error => {
+      if (error) {
+        showErrorMessage(error.message);
+        this.$router.replace("/auth");
+      } else {
+        Notify.create("Task added!");
+      }
+    });
   },
   fbUpdateTask({}, payload) {
     let taskRef = firebaseDb.ref(
       "tasks/" + firebaseAuth.currentUser.uid + "/" + payload.id
     );
-    taskRef.update(payload.updates);
+    taskRef.update(payload.updates, error => {
+      if (error) {
+        showErrorMessage(error.message);
+        this.$router.replace("/auth");
+      } else {
+        Notify.create("Task updated!");
+      }
+    });
   },
   fbDeleteTask({}, id) {
     let taskRef = firebaseDb.ref(
       "tasks/" + firebaseAuth.currentUser.uid + "/" + id
     );
-    taskRef.remove();
+    taskRef.remove(error => {
+      if (error) {
+        showErrorMessage(error.message);
+        this.$router.replace("/auth");
+      } else {
+        Notify.create("Task removed!");
+      }
+    });
   }
 };
 
