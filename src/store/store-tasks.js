@@ -27,7 +27,8 @@ const state = {
     // }
   },
   search: "",
-  sort: "dueDate"
+  sort: "dueDate",
+  tasksDownloaded: false
 };
 
 const mutations = {
@@ -45,23 +46,26 @@ const mutations = {
   },
   setSort(state, value) {
     state.sort = value;
+  },
+  setTasksDownloaded(state, value) {
+    state.tasksDownloaded = value;
   }
 };
 
 const actions = {
-  updateTask({ commit }, payload) {
-    commit("updateTask", payload);
+  updateTask({ dispatch }, payload) {
+    dispatch("fbUpdateTask", payload);
   },
-  deleteTask({ commit }, id) {
-    commit("deleteTask", id);
+  deleteTask({ dispatch }, id) {
+    dispatch("fbDeleteTask", id);
   },
-  addTask({ commit }, task) {
+  addTask({ dispatch }, task) {
     let taskId = uid();
     let payload = {
       id: taskId,
       task: task
     };
-    commit("addTask", payload);
+    dispatch("fbAddTask", payload);
   },
   setSearch({ commit }, value) {
     commit("setSearch", value);
@@ -95,6 +99,24 @@ const actions = {
       let payload = snapshot.key;
       commit("deleteTask", payload);
     });
+  },
+  fbAddTask({}, payload) {
+    let taskRef = firebaseDb.ref(
+      "tasks/" + firebaseAuth.currentUser.uid + "/" + payload.id
+    );
+    taskRef.set(payload.task);
+  },
+  fbUpdateTask({}, payload) {
+    let taskRef = firebaseDb.ref(
+      "tasks/" + firebaseAuth.currentUser.uid + "/" + payload.id
+    );
+    taskRef.update(payload.updates);
+  },
+  fbDeleteTask({}, id) {
+    let taskRef = firebaseDb.ref(
+      "tasks/" + firebaseAuth.currentUser.uid + "/" + id
+    );
+    taskRef.remove();
   }
 };
 

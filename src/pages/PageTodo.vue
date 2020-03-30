@@ -1,34 +1,43 @@
 <template>
   <q-page>
     <div class="q-pa-md absolute full-width full-height column">
-      <div class="row q-mb-lg">
-        <search-bar />
-        <sort />
-      </div>
-      <q-scroll-area class="relative-positio q-scroll-area-tasks">
-        <no-tasks v-if="!settings.showTasksInOneList && !Object.keys(tasksTodo).length" />
-        <p
-          v-if="!Object.keys(tasksTodo).length && !Object.keys(completedTasks).length"
-        >No search results.</p>
-        <tasks-todo :tasksTodo="tasksTodo" />
-        <tasks-completed
-          :tasksCompleted="completedTasks"
-          class="q-mb-xl"
-          :class="{'q-mt-lg' :!settings.showTasksInOneList}"
-        />
-      </q-scroll-area>
-      <!-- nopointer events will disable mouse actions on that element -->
-      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
-        <q-btn
-          round
-          color="primary"
-          size="24px"
-          icon="add"
-          class="all-pointer-events"
-          @click="showAddTask = !showAddTask"
-        />
-      </div>
+      <template v-if="tasksDownloaded">
+        <div class="row q-mb-lg">
+          <search-bar />
+          <sort />
+        </div>
+        <q-scroll-area class="relative-positio q-scroll-area-tasks">
+          <no-tasks v-if="!settings.showTasksInOneList && !Object.keys(tasksTodo).length" />
+          <p
+            v-if="!Object.keys(tasksTodo).length && !Object.keys(completedTasks).length"
+          >No search results.</p>
+          <tasks-todo :tasksTodo="tasksTodo" />
+          <tasks-completed
+            :tasksCompleted="completedTasks"
+            class="q-mb-xl"
+            :class="{'q-mt-lg' :!settings.showTasksInOneList}"
+          />
+        </q-scroll-area>
+        <!-- nopointer events will disable mouse actions on that element -->
+        <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+          <q-btn
+            round
+            color="primary"
+            size="24px"
+            icon="add"
+            class="all-pointer-events"
+            @click="showAddTask = !showAddTask"
+          />
+        </div>
+      </template>
+      <template v-else>
+        <div class="absolute-center">
+          <q-spinner-ball color="primary" size="2em" />
+          <q-tooltip :offset="[0, 8]">QSpinnerBall</q-tooltip>
+        </div>
+      </template>
     </div>
+
     <q-dialog v-model="showAddTask">
       <add-task @close="showAddTask = false" />
     </q-dialog>
@@ -47,7 +56,7 @@ export default {
   },
   computed: {
     ...mapGetters("tasks", ["tasksTodo", "completedTasks"]),
-    ...mapState("tasks", ["search"]),
+    ...mapState("tasks", ["search", "setTasksDownloaded"]),
     ...mapGetters("settings", ["settings"])
   },
   components: {
