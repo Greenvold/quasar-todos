@@ -13,6 +13,12 @@ export default {
     ...mapActions("auth", ["handleAuthStateChange"])
   },
   mounted() {
+    //only run if the current platform is electron
+    if (this.$q.platform.is.electron) {
+      require("electron").ipcRenderer.on("show-settings", () => {
+        this.$router.push({ name: "settings" });
+      });
+    }
     this.getSettings();
     this.handleAuthStateChange();
   }

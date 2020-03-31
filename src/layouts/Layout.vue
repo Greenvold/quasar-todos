@@ -58,6 +58,19 @@
           v-bind="link"
           class="text-grey-2"
         />
+        <q-item
+          class="text-grey-4 absolute-bottom"
+          clickable
+          v-if="$q.platform.is.electron"
+          @click="quitApp"
+        >
+          <q-item-section avatar>
+            <q-icon name="power_settings_new" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Quit</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -104,6 +117,20 @@ export default {
     ...mapActions("auth", ["logoutUser"]),
     logout() {
       this.logoutUser();
+    },
+    quitApp() {
+      this.$q
+        .dialog({
+          title: "Confirm",
+          message: "Really quit Awsome Todo?",
+          cancel: true,
+          persistent: true
+        })
+        .onOk(() => {
+          if (this.$q.platform.is.electron) {
+            require("electron").ipcRenderer.send("quit-app");
+          }
+        });
     }
   }
 };
